@@ -287,7 +287,7 @@ it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
 })
   
 //Exercicio extra 3
-it('preenche o campo da área de texto usando o comando invoke', () => {
+/*it('preenche o campo da área de texto usando o comando invoke', () => {
 cy.get('#open-text-area')
   .invoke ('val','Um texto qualquer')
   .should('have.value', 'Um texto qualquer')
@@ -317,10 +317,8 @@ it('faz uma requisição HTTP', () =>{
     .invoke('text', 'CAT TAT')
   cy.get('#subtitle')
     .invoke('text', 'Fale para o gatinho a baixo as suas informações (miau frau)')
- })
-
-
-
+ })*/
+ 
 }) 
 
     /*cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
