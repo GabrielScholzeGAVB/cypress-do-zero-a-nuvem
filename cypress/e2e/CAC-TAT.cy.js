@@ -287,7 +287,7 @@ it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
 })
   
 //Exercicio extra 3
-it.only('preenche o campo da área de texto usando o comando invoke', () => {
+it('preenche o campo da área de texto usando o comando invoke', () => {
 cy.get('#open-text-area')
   .invoke ('val','Um texto qualquer')
   .should('have.value', 'Um texto qualquer')
