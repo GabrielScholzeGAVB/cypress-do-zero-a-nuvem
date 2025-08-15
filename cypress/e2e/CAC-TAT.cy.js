@@ -309,7 +309,7 @@ it('faz uma requisição HTTP', () =>{
  })
 
  // Desafio final ache o gato
- it.only('encontre o gato', () => {
+ it('encontre o gato', () => {
   cy.get('#cat')
     .invoke('show')
     .should('be.visible')
