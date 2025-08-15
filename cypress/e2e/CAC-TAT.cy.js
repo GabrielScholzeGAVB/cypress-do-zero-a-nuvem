@@ -17,7 +17,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click()
 
     cy.get('.success').should('be.visible')
-     })
+    })
 
 
   
@@ -28,6 +28,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+
     cy.get('#firstName').type('Waldemir')
     cy.get('#lastName').type('Da Silva Braga')
     cy.get('#email').type('WaWaSilvaBraga@ToTestando.com')
@@ -36,6 +37,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click()
    
     cy.get('.error').should('be.visible')
+
   })
 
   it('preenche e limpa os campos nome, sobrenome, email e telefone', () =>{
@@ -71,9 +73,9 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
 // resolução 1
 it('envia o formuário com sucesso usando um comando customizado', () => {
-    cy.fillMandatoryFieldsAndSubmit()
+  cy.fillMandatoryFieldsAndSubmit()
 
-    cy.get('.success').should('be.visible')
+  cy.get('.success').should('be.visible')
   })
 
 // resolução 2
@@ -213,9 +215,125 @@ it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', 
   })
      
 
+it('preenche os campos obrigatórios e envia o formulário', () => {
+    cy.clock()
+    const longText = Cypress._.repeat('abcdefghijklmnopqrstuvwxyz', 10)
+    cy.get('#firstName').type('Waldemir')
+    cy.get('#lastName').type('Da Silva Braga')
+    cy.get('#email').type('WaWaSilvaBraga@ToTestando.com')
+    cy.get('#open-text-area').type(longText, { delay:0})
+    cy.contains('button', 'Enviar').click()
+
+    cy.get('.success').should('be.visible')
+
+    cy.tick(3000)
+  
+    cy.get('.success').should('not.be.visible')
+     })
+
+it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+  cy.clock()
+
+    cy.get('#firstName').type('Waldemir')
+    cy.get('#lastName').type('Da Silva Braga')
+    cy.get('#email').type('WaWaSilvaBraga@ToTestando.com')
+    cy.get('#open-text-area').type('Test')
+    cy.get('#phone-checkbox').click()
+    cy.contains('button', 'Enviar').click()
+   
+    cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+    cy.get('.success').should('not.be.visible')
+
+
+  })
+
+    it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+    cy.clock()
+    cy.contains('button', 'Enviar').click()
+    cy.get('.error').should('be.visible')
+    cy.tick(3000)
+    cy.get('.success').should('not.be.visible')
+  })
+  
+it('envia o formuário com sucesso usando um comando customizado', () => {
+  cy.clock()
+
+  cy.fillMandatoryFieldsAndSubmit()
+
+  cy.get('.success').should('be.visible')
+  
+  cy.tick(3000)
+  cy.get('.success').should('not.be.visible')
+  })
+
+  //Exercicio extra 2
+it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+  cy.get('.success')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Mensagem enviada com sucesso.')
+    .invoke('hide')
+    .should('not.be.visible')
+  cy.get('.error')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Valide os campos obrigatórios!')
+    .invoke('hide')
+    .should('not.be.visible')
+})
+  
+//Exercicio extra 3
+it.only('preenche o campo da área de texto usando o comando invoke', () => {
+cy.get('#open-text-area')
+  .invoke ('val','Um texto qualquer')
+  .should('have.value', 'Um texto qualquer')
+})
+
+it('faz uma requisição HTTP', () =>{
+    cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+      .as('getRequest')
+      .its('status')
+      .should('be.equal', 200)
+    
+    cy.get('@getRequest')
+      .its('statusText')
+      .should('be.equal', 'OK')
+
+    cy.get('@getRequest') 
+      .its('body')
+      .should('include', 'CAC TAT')
+ })
+
+ // Desafio final ache o gato
+ it.only('encontre o gato', () => {
+  cy.get('#cat')
+    .invoke('show')
+    .should('be.visible')
+  cy.get('#title')
+    .invoke('text', 'CAT TAT')
+  cy.get('#subtitle')
+    .invoke('text', 'Fale para o gatinho a baixo as suas informações (miau frau)')
+ })
+
+
+
 }) 
 
-
+    /*cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+      .as('getRequest')
+      .its('status')
+      .should('be.equal', 200)
+    cy.get('@getRequest')
+      .its('statusText')
+      .should('be.equal', 'OK')
+    cy.get('@getRequest') 
+      .its('body')
+      .should('include', 'cat')
+      id="cat"&gt;🐈*/
 
   /*it.only('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () =>{
     cy.contains('a', 'política de privacidade')  
